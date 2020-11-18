@@ -1,6 +1,9 @@
 package cn.itcast.day04.demo01.preparing;
 
-import cn.itcast.day04.demo01.DBHelper.DBHelper;
+//import cn.itcast.day04.demo01.DBHelper.DBHelper;
+
+
+import cn.itcast.day04.demo01.util.JDBCUtils;
 
 import java.io.*;
 import java.net.Socket;
@@ -34,7 +37,7 @@ public class ClientThread extends Thread{
                     SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd hh:mm:ss a");
                     ClientUI.getClientTa().append("服务器说:  " + text + "\t" + "\t" + sdf.format(date) + '\n');
 
-                    conn = DBHelper.getConnection();
+                    conn = JDBCUtils.getConnection();
                     String sql = "insert into tb_record values(null,'服务器','" + text + "','" + sdf.format(date) + "')";
                     stmt = conn.prepareStatement(sql);
                     int i = stmt.executeUpdate();
@@ -47,22 +50,23 @@ public class ClientThread extends Thread{
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                    if (stmt != null) {
-                        try {
-                            stmt.close();
-                        } catch (SQLException throwables) {
-                            throwables.printStackTrace();
-                        }
-                        if (conn != null) {
-                            try {
-                                conn.close();
-                            } catch (SQLException throwables) {
-                                throwables.printStackTrace();
-                            }
-                        }
-                    }
-
+//                    if (stmt != null) {
+//                        try {
+//                            stmt.close();
+//                        } catch (SQLException throwables) {
+//                            throwables.printStackTrace();
+//                        }
+//                        if (conn != null) {
+//                            try {
+//                                conn.close();
+//                            } catch (SQLException throwables) {
+//                                throwables.printStackTrace();
+//                            }
+//                        }
+//                    }
+                    JDBCUtils.close(stmt,conn);
                 }
+
             }
 
         } catch (IOException e) {
